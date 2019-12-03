@@ -1,19 +1,26 @@
 import numpy as np
 
+with open('input.txt','r') as f:
+    data = f.readlines()
+    wire1, wire2 = data[0].replace("\n",""), data[1].replace("\n","")
+    wire1 = wire1.split(",")
+    wire2 = wire2.split(",")
+
+board = np.zeros([20000,20000],dtype=int)
+
+starting_x, starting_y = 10000, 10000
+board[starting_x,starting_y] = 10 # arbitrary value set to 10 here
+
+
+#################### 
 # part 1
+#################### 
+
+    
 def part_1():
-    with open('input.txt','r') as f:
-        data = f.readlines()
-        wire1, wire2 = data[0].replace("\n",""), data[1].replace("\n","")
-        wire1 = wire1.split(",")
-        wire2 = wire2.split(",")
         
     
-    board = np.zeros([20000,20000],dtype=int)
-    
-    starting_x, starting_y = 10000, 10000
-    board[starting_x,starting_y] = 10 # arbitrary value set to 10 here
-    
+   
     def check_presence(val, wire_num):
         # this says, if the wire is empty, just mark it with the current wire
         # also if the wire is crossing its own path, mark with current wire
@@ -101,6 +108,7 @@ def part_1():
     for instruction in wire2:
         current_x, current_y = mark_path(current_x, current_y, instruction, 2) # hardcode 2 for second wire num
             
+    global overlap_coords
     overlap_coords = [] # list of lists   
     for x in range(board.shape[0]):
         for y in range(board.shape[1]):
@@ -120,3 +128,123 @@ def part_1():
             min_score = score
     print("Final coords %s min_distance %s" (min_coords,min_score))
                 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################### 
+# part 2
+#################### 
+
+
+# we'll make a dictionary per intersection
+# and assign the number of steps each wire needs to reach
+# we're going to have to store it as a string then parse later
+def part_2():
+    intersections = {}
+    for i in overlap_coords:
+        intersections[str(i)] = {'wire1':0,'wire2':0}
+    
+    #def part_2():
+    def check_path(current_x,current_y,instruction,wire_num, current_steps):
+        print("Wire %s instruction %s current_x %s current_y %s current_steps %s" % (wire_num,instruction,current_x,current_y, current_steps))
+        direction = instruction[0]
+        steps = int(instruction[1:])
+        
+        x_flag = False
+        y_flag = False
+        if direction == "D":
+            endpoint_x = current_x
+            endpoint_y = current_y + steps
+            check_range = range(current_y, endpoint_y + 1)
+            y_flag = True
+        elif direction == "U":
+            endpoint_x = current_x
+            endpoint_y = current_y - steps
+            check_range = range(endpoint_y - 1, current_y)
+            y_flag = True
+        elif direction == "R":
+            endpoint_y = current_y
+            endpoint_x = current_x + steps
+            check_range = range(current_x, endpoint_x + 1)
+            x_flag = True
+        elif direction == "L":
+            endpoint_y = current_y
+            endpoint_x = current_x - steps
+            check_range = range(endpoint_x - 1, current_x)
+            x_flag = True
+        # now read position of every step along the way, check if its a intersection
+        
+        for i in check_range:
+            if x_flag:
+                new_x_coord = i
+                new_y_coord = current_y
+            elif y_flag:
+                new_x_coord = current_x
+                new_y_coord = i
+            
+            
+            # read current x/y
+            cur_val = board[new_x_coord,new_y_coord]
+    #        print("Current value %s at %s %s" % (cur_val,new_x_coord, new_y_coord))
+    
+            
+            # if overlap
+            if cur_val == 3:
+                print("Intersection hit at %s %s" % (new_x_coord, new_y_coord))
+                # find the matching intersection
+    #            breakpoint()
+                for inter in intersections:
+                    x_coord = int(inter.split(", ")[0].replace("[",""))
+                    y_coord = int(inter.split(", ")[1].replace("]",""))
+                    if new_x_coord == x_coord and new_y_coord == y_coord:
+                        print("Matching intersection found")
+                        intersections[inter]['wire'+str(wire_num)] = current_steps
+            if cur_val == 0:
+                breakpoint()                    
+            current_steps += 1
+            
+        # afterwards, remove 1 due to range issues above
+        current_steps -= 1
+            
+            
+        # mark new steps
+        return endpoint_x, endpoint_y, current_steps # new starting position for next
+    
+    current_x, current_y = starting_x, starting_y
+    current_steps = 0
+    for instruction in wire1:
+        current_x, current_y, current_steps = check_path(current_x, current_y, instruction, 1, current_steps) # hardcode 1 for first wire num
+    current_x, current_y = starting_x, starting_y
+    current_steps = 0
+    for instruction in wire2:
+        current_x, current_y, current_steps = check_path(current_x, current_y, instruction, 2, current_steps) # hardcode 2 for second wire num
+    
+    min_score = 10000000000
+    min_intersection = ''
+    for i in intersections:
+        score = intersections[i]['wire1'] + intersections[i]['wire2']
+        if score < min_score:
+            min_score = score
+            min_intersection = i
+    print("Min intersection score %s " % min_score)
