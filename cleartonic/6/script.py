@@ -22,7 +22,7 @@ class Planet():
         self.indirect_orbits_count = 0
         self.data = data
         self.name = self.data.split(")")[1]
-        self.direct_orbit = self.data.split(")")[0] # this is NOT that this Planet orbits X. It's that X planet orbits THIS
+        self.direct_orbit = self.data.split(")")[0]
         
 
     def print(self):
