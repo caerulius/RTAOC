@@ -53,6 +53,7 @@ def processInstruction(opcode, parameters, program, relativeBase):
     #inp. takes raw input and stores in 1
     elif instruction == "03":
         loc = getValueLiteral(program, parameters[0][0], parameters[0][1], relativeBase)
+
         program[loc] = int(input())
         index = len(parameters) + 1
 
@@ -65,13 +66,8 @@ def processInstruction(opcode, parameters, program, relativeBase):
     #jit. jumps to 2 if 1 is NOT 0
     elif instruction == "05":
         compval = getValue(program, parameters[0][0], parameters[0][1], relativeBase)
-
         if compval != 0:
-            if parameters[1][1] == 0:
-                jumpto = program[parameters[1][0]]
-            else:
-                jumpto = parameters[1][0]
-            index = jumpto
+            index = getValue(program, parameters[1][0], parameters[1][1], relativeBase)
             jump = True
         else:
             index = len(parameters) + 1
@@ -81,11 +77,7 @@ def processInstruction(opcode, parameters, program, relativeBase):
         compval = getValue(program, parameters[0][0], parameters[0][1], relativeBase)
 
         if compval == 0:
-            if parameters[1][1] == 0:
-                jumpto = program[parameters[1][0]]
-            else:
-                jumpto = parameters[1][0]
-            index = jumpto
+            index = getValue(program, parameters[1][0], parameters[1][1], relativeBase)
             jump = True
         else:
             index = len(parameters) + 1
