@@ -10,7 +10,7 @@ namespace AdventDay1
     {
         static void Main(string[] args)
         {
-            var massFile = File.ReadAllLines("C:\\Users\\justin.huang\\source\\repos\\AdventDay1\\Day1Input.txt");
+            var massFile = File.ReadAllLines("C:\\Users\\justin.huang\\Documents\\GitHub\\RTAOC\\cas\\AdventDay1\\Day1Input.txt");
             var massInputList = new List<string>(massFile);
             List<int> massList = massInputList.ConvertAll(s => Int32.Parse(s));
 
