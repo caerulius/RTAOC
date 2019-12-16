@@ -1,2 +1,17 @@
 bin/
 obj/
+cas/AdventDay1/Day1Input.txt
+cas/AdventDay1/AdventDay1.csproj
+cas/AdventDay1/Advent2019.sln
+cas/AdventDay1/.vs/AdventDay1/DesignTimeBuild/.dtbcache
+cas/AdventDay1/.vs/Advent2019/v16/Server/sqlite3/storage.ide-wal
+cas/AdventDay1/.vs/Advent2019/v16/Server/sqlite3/storage.ide-shm
+cas/AdventDay1/.vs/Advent2019/v16/Server/sqlite3/storage.ide
+cas/AdventDay1/.vs/Advent2019/v16/Server/sqlite3/db.lock
+cas/AdventDay1/.vs/Advent2019/v16/.suo
+cas/.vs/Advent2019/v16/Server/sqlite3/storage.ide
+cas/.vs/Advent2019/v16/Server/sqlite3/db.lock
+cas/.vs/Advent2019/v16/.suo
+cas/.vs/Advent2019/DesignTimeBuild/.dtbcache
+cas/AdventDay2/AdventDay2.csproj
+cas/AdventDay2/Day2Input.txt
